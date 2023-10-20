@@ -1,0 +1,247 @@
+/* LandingPage.css */
+.landing-page {
+    font-family: Arial, sans-serif;
+  }
+  
+  header {
+    /* background-image: url('../../Logos/pexels-timelockz-4367584.jpg'); */
+    background-color: transparent;
+    color: #fff;
+    padding: 20px;
+  }
+  
+  nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  nav li {
+    font-size: 18px;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+  }
+  
+  .main {
+    text-align: center;
+    padding: 40px;
+  }
+  
+  .hero {
+    background-image: url('../../Logos/pexels-timelockz-4367584.jpg');
+    background-size: cover;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    margin-top: 100px;
+  }
+  
+  .hero-content {
+    text-align: center;
+  }
+  
+  .hero h1 {
+    font-size: 36px;
+    margin: 0;
+  }
+  
+  .hero p {
+    color: #fff;
+    font-size: 18px;
+  }
+  
+  .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    border: 1px solid #fff;
+    margin-top: 20px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .btn:hover {
+    background-color: #fff;
+    color: #333;
+  }
+  
+  .get-started {
+    background-color: #f7f7f7;
+    padding: 40px;
+    text-align: center;
+  }
+  
+  .get-started h2 {
+    font-size: 28px;
+  }
+  
+  footer {
+    background-color: wheat;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+  }
+  
+  .about-us {
+    background-color: #f9f9f9; /* Background color for the section */
+    padding: 40px 0;
+    text-align: center;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  h2 {
+    font-size: 2rem;
+    color: #333; /* Heading color */
+  }
+  
+  p {
+    font-size: 1.2rem;
+    margin: 20px 0;
+    color: #666; /* Text color */
+  }
+
+  
+/* Services section container */
+.services-section {
+    background-color: #f7f7f7; /* Background color */
+    padding: 80px 0;
+  }
+  
+  /* Section title styles */
+  .services-section h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  /* Services list container */
+  .services-list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Service item styles */
+  .service-item {
+    flex-basis: calc(33.33% - 20px);
+    padding: 20px;
+    background-color: #fff; /* Background color for service items */
+    border-radius: 5px;
+    text-align: center;
+    margin: 10px;
+  }
+  
+  /* Service icon styles */
+  .service-icon {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #FF5733; /* Icon color */
+  }
+  
+  /* Service title styles */
+  .service-item h3 {
+    font-size: 1.5rem;
+    margin: 10px 0;
+  }
+  
+  /* Service description styles */
+  .service-item p {
+    font-size: 1rem;
+    color: #888; /* Description text color */
+  }
+  
+  /* Responsive styles for service items on smaller screens */
+  @media (max-width: 768px) {
+    .services-list {
+      flex-direction: column;
+      align-items: center;
+    }
+    .service-item {
+      flex-basis: 100%;
+    }
+  }
+
+  /* ContactUs.css */
+
+/* Contact Us section container */
+.contact-us-section {
+  background-color: #f7f7f7;
+  padding: 20px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 2rem;
+  color: #333;
+}
+
+p {
+  font-size: 1rem;
+  color: #666;
+}
+
+/* Toggle button */
+.toggle-button {
+  background-color: #FF5733; /* Button background color */
+  color: #fff; /* Button text color */
+  border: none;
+  padding: 10px 20px;
+  margin: 20px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-button:hover {
+  background-color: #FF7F50; /* Button background color on hover */
+}
+
+/* Contact form */
+.contact-form {
+  text-align: left;
+}
+
+label {
+  font-size: 1rem;
+  display: block;
+  margin-top: 10px;
+  color: #333;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.submit-button {
+  background-color: #FF5733; /* Button background color */
+  color: #fff; /* Button text color */
+  border: none;
+  padding: 10px 20px;
+  margin: 20px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #FF7F50; /* Button background color on hover */
+}
