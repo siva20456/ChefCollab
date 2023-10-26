@@ -1,4 +1,5 @@
 import React,{useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import './LandingPage.css';
 
 interface Service {
@@ -30,10 +31,19 @@ const LandingPage: React.FC = () => {
 
 
     const [showContactForm, setShowContactForm] = useState(false);
+    const navigate = useNavigate()
 
     const toggleContactForm = () => {
         setShowContactForm(!showContactForm);
     };
+
+    const gotoSignIn = () => {
+        navigate('/register-signin',{replace:true})
+    }
+
+    const restSignIn = () => {
+        navigate('/restaurent-sign',{replace:true})
+    }
 
     return (
         <div className="landing-page">
@@ -44,9 +54,12 @@ const LandingPage: React.FC = () => {
                         <li><a href="#about-us">About Us</a></li>
                         <li><a href="#services-section">Services</a></li>
                         <li><a href="#contact">Contact</a></li>
+                        <li><a href='' onClick={restSignIn}>Restaurent?</a></li>
                     </ul>
                 </nav>
             </header>
+
+            
 
             <main>
                 <section className="hero">
@@ -57,10 +70,11 @@ const LandingPage: React.FC = () => {
                     </div>
                 </section>
 
+
                 <section id="get-started" className="get-started">
                     <h2>Get Started Today</h2>
                     <p>Join our platform and connect with talented chefs and food lovers.</p>
-                    <a href="#sign-up" className="btn">Sign Up</a>
+                    <button className="btn" onClick={gotoSignIn}>Sign Up</button>
                 </section>
 
                 <section id='about-us' className="about-us">
