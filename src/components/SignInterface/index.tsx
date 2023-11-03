@@ -8,6 +8,12 @@ interface ChefFormData {
     email: string;
     password: string;
     specialty: string;
+    fname: string;
+    lname: string;
+    age: number;
+    mobile: string;
+    location: string;
+    gender: string;
 }
 
 const initialFormData: ChefFormData = {
@@ -15,6 +21,12 @@ const initialFormData: ChefFormData = {
     email: '',
     password: '',
     specialty: '',
+    fname: '',
+    lname: '',
+    age: 0,
+    mobile: '',
+    location: '',
+    gender:'male',
 };
 
 function SignInterface() {
@@ -24,7 +36,7 @@ function SignInterface() {
     const [mail, setMail] = useState<String>('')
     const [password, setPassword] = useState<String>('')
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
@@ -98,54 +110,119 @@ function SignInterface() {
             case 'Register':
                 return <form className="registration-form" onSubmit={handleRegisterSubmit}>
                     <h2>Chef Registration</h2>
-                    <div className="form-group">
-                        <label className='label' htmlFor="name">Name:</label>
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label className='label' htmlFor="email">Email:</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label className='label' htmlFor="password">Password:</label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label className='label' htmlFor="specialty">Specialty:</label>
-                        <input
-                            type="text"
-                            id="specialty"
-                            name="specialty"
-                            value={formData.specialty}
-                            onChange={handleChange}
-                            required
-                        />
+                    <div className='form-cont'>
+                        <div className="form-group">
+                            <label className='label' htmlFor="fname">First Name:</label>
+                            <input
+                                type="text"
+                                id="fname"
+                                name="fname"
+                                value={formData.fname}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className='label' htmlFor="lname">Last Name:</label>
+                            <input
+                                type="text"
+                                id="lname"
+                                name="lname"
+                                value={formData.lname}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className='label' htmlFor="name">Username:</label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className='label' htmlFor="email">Email:</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className='label' htmlFor="password">Password:</label>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className='label' htmlFor="age">Age:</label>
+                            <input
+                                type='number'
+                                id="name"
+                                name="name"
+                                value={formData.age}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className='label' htmlFor="gender">Gender:</label>
+                            <select className='input-ele' id='gender' name='gender' value={formData.gender} onChange={handleChange} required>
+                                <option value='male'>Male</option>
+                                <option value='female'>Female</option>
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label className='label' htmlFor="mobile">Mobile Number:</label>
+                            <input
+                                type="text"
+                                id="mobile"
+                                name="mobile"
+                                value={formData.mobile}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className='label' htmlFor="specialty">Specialty:</label>
+                            <input
+                                type="text"
+                                id="specialty"
+                                name="specialty"
+                                value={formData.specialty}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className='label' htmlFor="location">Location:</label>
+                            <input
+                                type="text"
+                                id="location"
+                                name="location"
+                                value={formData.location}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
                     </div>
                     <button type="submit" className="register-button">
                         Register
                     </button>
                     <p className='text-secondary mt-2' style={{ fontSize: 12 }}>Already had account?<button className='signup-btn' onClick={() => setStatus('SignIn')}>Sign In</button></p>
+
                 </form>
 
             case 'SignIn':
