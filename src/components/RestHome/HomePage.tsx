@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie';
+
 import Header from './Header';
 import SearchBar from './SearchTab';
 import ChefCard from './ChefCard';
+import Notification from '../ChefHome/Notification';
 import './Styles.css';
 import chefFemale from '../../Logos/chefFemale.png'
 import chefFemale2 from '../../Logos/chefFemale2.png'
@@ -33,6 +35,7 @@ interface Chef {
 function Home() {
   const [chefList, setChefList] = useState<Chef[]>([])
   const [filteredChefs, setFilteredChefs] = useState<Chef[]>([])
+  const [modal, setModal] = useState(false)
   const jwt_token = Cookies.get('jwt_token');
   const user_type = Cookies.get('user_type');
   const nav = useNavigate()
@@ -41,9 +44,29 @@ function Home() {
   }
 
   useEffect(() => {
-
+    
     getChefData()
   }, [])
+
+  const getPersonalData = async () => {
+    const options = {
+      method: 'GET',
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        'Authorization': `Bearer ${jwt_token}`
+      }
+    }
+
+    const url = `http://localhost:3005/getRestInfo`
+    const infoResp = await fetch(url, options)
+    if (infoResp.status === 200) {
+      const data = await infoResp.json()
+      console.log(data,'data')
+      const {user_data,user_portfolio} = data
+      Cookies.set('name',user_data.name,{expires:1})
+      return user_portfolio
+    }
+  }
 
   const getChefData = async () => {
     const url = 'http://localhost:3005/chefData'
@@ -58,6 +81,10 @@ function Home() {
         }
         return ({ ...e, imageUrl: femaleChefs[Math.floor(Math.random() * 3)] })
       })
+      const user_portfolio = await getPersonalData()
+      if(!user_portfolio.isCompleted){
+        setModal(true)
+      }
       setChefList(chefData)
       setFilteredChefs(chefData)
     }
@@ -83,8 +110,11 @@ function Home() {
   };
 
 
+
+
   return (
     <div className="Home">
+      {modal && <Notification message={`Hello Org., Complete your protfolio for better recommendations..!`} type='success' />}
       <Header />
       <SearchBar onSearch={handleSearch} />
       <div className="chef-list">
@@ -92,6 +122,7 @@ function Home() {
           <ChefCard key={index} {...chef} />
         ))}
       </div>
+      
     </div>
   );
 }

@@ -1,6 +1,7 @@
-import React,{useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LandingPage.css';
+import Cookies from 'js-cookie';
 
 interface Service {
     title: string;
@@ -33,16 +34,31 @@ const LandingPage: React.FC = () => {
     const [showContactForm, setShowContactForm] = useState(false);
     const navigate = useNavigate()
 
+    useEffect(() => {
+        const jwt_token = Cookies.get('jwt_token');
+        const user_type = Cookies.get('user_type')
+        console.log(user_type)
+        if (user_type == 'Chef') {
+            //need to check authorization
+
+            navigate('/ChefHome', { replace: true })
+        } else if (user_type == 'Restaurant') {
+            //need to  check Auth
+
+            navigate('/RestHome', { replace: true })
+        }
+    }, [])
+
     const toggleContactForm = () => {
         setShowContactForm(!showContactForm);
     };
 
     const gotoSignIn = () => {
-        navigate('/register-signin',{replace:true})
+        navigate('/register-signin', { replace: true })
     }
 
     const restSignIn = () => {
-        navigate('/restaurent-sign',{replace:true})
+        navigate('/restaurent-sign', { replace: true })
     }
 
     return (
@@ -59,7 +75,7 @@ const LandingPage: React.FC = () => {
                 </nav>
             </header>
 
-            
+
 
             <main>
                 <section className="hero">

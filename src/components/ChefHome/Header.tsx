@@ -8,10 +8,10 @@ const Header: React.FC = () => {
         <img src={Logo} className='logo' />
       <nav>
         <ul>
-          <li><a href="/RestHome">Home</a></li>
-          <li><a href="/RestPortfolio">My Portfolio</a></li>
-          <li><a href="/Applications">Applications</a></li>
-          <li><a href="/Applications">Logout</a></li>
+          <li><a href="/ChefHome">Home</a></li>
+          <li><a href="/ChefPortfolio">My Portfolio</a></li>
+          <li><a href="/about">My Applications</a></li>
+          <li><a href="/about">Logout</a></li>
         </ul>
       </nav>
     </header>
