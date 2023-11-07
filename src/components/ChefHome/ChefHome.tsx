@@ -7,6 +7,8 @@ import RestCard from './RestCard';
 import Notification from './Notification';
 import './Styles.css';
 
+import { ThreeDots } from "react-loader-spinner";
+
 import restaurant1 from '../../Logos/restaurant1.png'
 import restaurant2 from '../../Logos/restaurant2.png'
 import restaurant3 from '../../Logos/restaurant3.png'
@@ -29,17 +31,20 @@ interface Restaurant {
 function ChefHome() {
   const [ResList, setRestList] = useState<Restaurant[]>([])
   const [filteredRests, setFilteredRests] = useState<Restaurant[]>([])
-  const [Notifies,setNotifies] = useState(false)
+  const [Notifies, setNotifies] = useState(false)
+  const [loading, setLoading] = useState(true)
   const jwt_token = Cookies.get('jwt_token');
   const user_type = Cookies.get('user_type');
   const nav = useNavigate()
-  if (user_type != 'Chef' || jwt_token === null) {
-    nav('/', { replace: true })
-  }
+  
 
   useEffect(() => {
-    
-    getRestData()
+    if (user_type != 'Chef' || jwt_token === null) {
+      nav('/', { replace: true })
+    }else{
+      getRestData()
+    }
+
   }, [])
 
   const getPersonalData = async () => {
@@ -53,7 +58,7 @@ function ChefHome() {
     }
 
     const url = 'http://localhost:3005/getInfo'
-    const response = await fetch(url,options)
+    const response = await fetch(url, options)
     console.log(response)
     if (response.status === 200) {
       const data = await response.json()
@@ -64,6 +69,7 @@ function ChefHome() {
   }
 
   const getRestData = async () => {
+    setLoading(true)
     const url = 'http://localhost:3005/restData'
     const response = await fetch(url)
     console.log(response)
@@ -75,12 +81,13 @@ function ChefHome() {
         return ({ ...e, imageUrl: restaurants[Math.floor(Math.random() * 4)] })
       })
       const user_portfolio = await getPersonalData()
-      Cookies.set('mail',user_portfolio.mail,{expires:1})
-      if(!user_portfolio.isCompleted){
+      Cookies.set('mail', user_portfolio.mail, { expires: 1 })
+      if (!user_portfolio.isCompleted) {
         setNotifies(true)
       }
       setRestList(restData)
       setFilteredRests(restData)
+      setLoading(false)
     }
   }
 
@@ -88,13 +95,13 @@ function ChefHome() {
     var rests: Restaurant[] = ResList
     switch (category) {
       case 'Location':
-        rests = ResList.filter(each => each.location.includes(text));
+        rests = ResList.filter(each => each.location.toLowerCase().includes(text.toLowerCase()));
         break;
       case 'Name':
-        rests = ResList.filter(each => each.name.includes(text));
+        rests = ResList.filter(each => each.name.toLowerCase().includes(text.toLowerCase()));
         break
       case 'Specialty':
-        rests = ResList.filter(each => each.style.includes(text));
+        rests = ResList.filter(each => each.style.toLowerCase().includes(text.toLowerCase()));
         break
       default:
         break;
@@ -104,18 +111,32 @@ function ChefHome() {
   };
 
 
-  return (
-    <div className="Home">
-      {Notifies && <Notification message={`Hello Chef, Complete your protfolio for better recommendations..!`} type='success' />}
-      <Header />
-      <SearchBar onSearch={handleSearch} />
-      <div className="chef-list">
-        {filteredRests.map((rest, index) => (
-          <RestCard key={index} {...rest} />
-        ))}
-      </div>
+  const renderContext = () => {
+    if (loading) {
+      return (
+        <div className='container' style={{ display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center',marginTop:400 }}>
+          <ThreeDots color=" #3b82f6" height="50" width="50" />
+        </div>
+      )
+    }
+    return (
+      <div className="Home">
+        {Notifies && <Notification message={`Hello Chef, Complete your protfolio for better recommendations..!`} type='success' />}
+        <Header />
+        <SearchBar onSearch={handleSearch} />
+        <div className="chef-list">
+          {filteredRests.map((rest, index) => (
+            <RestCard key={index} {...rest} />
+          ))}
+        </div>
 
-    </div>
+      </div>
+    )
+  }
+
+
+  return (
+    renderContext()
   );
 }
 

@@ -7,6 +7,9 @@ import { IoLocationSharp } from 'react-icons/io5'
 
 import { TiShoppingBag } from 'react-icons/ti'
 
+import { ThreeDots } from "react-loader-spinner";
+
+
 import Header from '../ChefHome/Header'
 import Cookies from 'js-cookie'
 
@@ -15,50 +18,52 @@ import defaultRestuarant from '../../Logos/defaultRestaurant.png'
 import './Styles.css'
 
 interface Reqs {
-    exp: string;
-    rate: string;
+  exp: string;
+  rate: string;
 }
 
 interface Portfolio {
-    name: string;
-    mail: string;
-    location: string;
-    style: string;
-    salaryMargin: string;
-    req: Reqs;
-    desc: string;
-    mailVerification: boolean;
-    avgCust: number;
-    isCompleted: boolean;
-    other: string;
+  name: string;
+  mail: string;
+  location: string;
+  style: string;
+  salaryMargin: string;
+  req: Reqs;
+  desc: string;
+  mailVerification: boolean;
+  avgCust: number;
+  isCompleted: boolean;
+  other: string;
+  rating: number;
 }
 
 interface Data {
-    name: string;
-    mail: string;
-    password: string;
-    mobile: string;
+  name: string;
+  mail: string;
+  password: string;
+  mobile: string;
 }
 
 const sampleData = {
-    name: '',
-    mail: '',
-    password: '',
-    mobile: ''
+  name: '',
+  mail: '',
+  password: '',
+  mobile: ''
 }
 
 const samplePortfolio = {
-    name: '',
-    mail: '',
-    location: '',
-    style: '',
-    salaryMargin: '',
-    req: { exp: '', rate: '' },
-    desc: '',
-    mailVerification: false,
-    avgCust: 0,
-    isCompleted: false,
-    other: ''
+  name: '',
+  mail: '',
+  location: '',
+  style: '',
+  salaryMargin: '',
+  req: { exp: '', rate: '' },
+  desc: '',
+  mailVerification: false,
+  avgCust: 0,
+  isCompleted: false,
+  other: '',
+  rating: 0,
 }
 
 
@@ -67,13 +72,17 @@ const RestDetailPage: React.FC = () => {
 
   const jwt_token = Cookies.get('jwt_token')
   const nav = useNavigate()
-  const { name } = useParams<{ name: string}>()
+  const { name } = useParams<{ name: string }>()
   const [userData, setData] = useState<Data>(sampleData)
   const [portfolio, setPortfolio] = useState<Portfolio>(samplePortfolio)
   const [loading, setLoading] = useState(true)
-
+  const user_type = Cookies.get('user_type');
+  
 
   useEffect(() => {
+    if (user_type != 'Chef' || jwt_token === null) {
+      nav('/', { replace: true })
+    }
     getRestDetail()
   }, [])
 
@@ -97,15 +106,14 @@ const RestDetailPage: React.FC = () => {
       setLoading(false)
     } else {
       alert('Error Occured. Please try Again..!')
-      nav('/', { replace: true })
     }
   }
 
-  const requestFor = async() => {
+  const requestFor = async () => {
     const url = 'http://localhost:3005/addRequest'
     const options = {
       method: 'POST',
-      body: JSON.stringify({ name,mail:Cookies.get('mail') }),
+      body: JSON.stringify({ name, mail: Cookies.get('mail') }),
       headers: {
         "Content-type": "application/json; charset=UTF-8"
       }
@@ -114,7 +122,7 @@ const RestDetailPage: React.FC = () => {
     if (infoResp.status === 200) {
       const data = await infoResp.json()
       console.log(data, 'data')
-      alert('Requested for an Oppurtunity..')
+      alert(data.data)
     } else {
       alert('Error Occured. Please try Again..!')
     }
@@ -122,8 +130,8 @@ const RestDetailPage: React.FC = () => {
 
   const renderContext = () => {
     if (loading) {
-      return <div className='d-flex flex-column justify-content-center'>
-        Loading...
+      return <div className='container' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 400 }}>
+        <ThreeDots color=" #3b82f6" height="50" width="50" />
       </div>
     }
     return <div className="job-detail-bg">
@@ -138,7 +146,7 @@ const RestDetailPage: React.FC = () => {
             <h1 className="logo-name">{userData.name}</h1>
             <div className="star-cont">
               <AiOutlineStar className="star" />
-              <p className="rating ml-2">{portfolio.avgCust}</p>
+              <p className="rating ml-2">{portfolio.rating}</p>
             </div>
           </div>
         </div>
@@ -149,7 +157,7 @@ const RestDetailPage: React.FC = () => {
               {portfolio.location}
             </p>
             <p className="det-cont">
-              <TiShoppingBag  />
+              <TiShoppingBag />
               {portfolio.style}
             </p>
           </div>
@@ -170,20 +178,20 @@ const RestDetailPage: React.FC = () => {
         <p className="description">{portfolio.desc}</p>
         <p className="req">Requirements</p>
         <ul className="skill-cont">
-          
-            <li className="skill">
-              <p className="desc-text" style={{display:'row'}}>Minimum Experience : {portfolio.req.exp} Years</p>
-            </li>
-            <li className='skill'>
-              <p className="desc-text">Minimum Rating : {portfolio.req.rate}</p>
-            </li>
-        </ul>
-        <button style={{backgroundColor:'green',color:'white',padding:5,border:'none',cursor:'pointer',alignSelf:'flex-end'}} onClick={requestFor}>Request</button>
 
-        
+          <li className="skill">
+            <p className="desc-text" style={{ display: 'row' }}>Minimum Experience : {portfolio.req.exp} Years</p>
+          </li>
+          <li className='skill'>
+            <p className="desc-text">Minimum Rating : {portfolio.req.rate} Star</p>
+          </li>
+        </ul>
+        <button style={{ backgroundColor: 'green', color: 'white', padding: 5, border: 'none', cursor: 'pointer', alignSelf: 'flex-end' }} onClick={requestFor}>Request</button>
+
+
       </div>
 
-      
+
     </div>
   }
 
@@ -192,7 +200,7 @@ const RestDetailPage: React.FC = () => {
       <Header />
       {renderContext()}
     </div>
-    
+
   )
 }
 

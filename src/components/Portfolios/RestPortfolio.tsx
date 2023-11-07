@@ -1,7 +1,21 @@
 import React, { useState, useEffect } from "react"
 import { Button, Label, Col, Row } from 'reactstrap';
+import { ThreeDots } from "react-loader-spinner";
 import Header from "../RestHome/Header";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+
+const ratingObj = (num:number) => {
+    if(num <= 10000){
+        return 2
+    }else if(num <= 20000){
+        return 3
+    }else if(num <= 30000){
+        return 4
+    }else{
+        return 5
+    }
+}
 
 interface Reqs {
     exp: string;
@@ -20,6 +34,7 @@ interface Portfolio {
     avgCust: number;
     isCompleted: boolean;
     other: string;
+    rating:number;
 }
 
 interface Data {
@@ -47,7 +62,8 @@ const samplePortfolio = {
     mailVerification: false,
     avgCust: 0,
     isCompleted: false,
-    other: ''
+    other: '',
+    rating:0
 }
 
 
@@ -55,17 +71,24 @@ const Portfolio: React.FC = () => {
 
     const [portfolio, setPortfolio] = useState<Portfolio>(samplePortfolio)
     const [data, setData] = useState<Data>(sampleData)
-    const jwt_token = Cookies.get('jwt_token') 
-    const [otp,setOtp] = useState('')
-    const [inputOTP,setInputOtp] = useState('')
-    const [loading,setLoading] = useState(true)
-    const [mailVerification,setMailVerification] = useState(true)
+    const jwt_token = Cookies.get('jwt_token')
+    const user_type = Cookies.get('user_type')
+    const [otp, setOtp] = useState('')
+    const [inputOTP, setInputOtp] = useState('')
+    const [loading, setLoading] = useState(true)
+    const [mailVerification, setMailVerification] = useState(true)
+    const nav = useNavigate()
 
     useEffect(() => {
+        if (jwt_token == null || user_type != 'Restaurant') {
+
+            nav('/', { replace: true })
+        }
         getPersonalData()
     }, [])
 
     const getPersonalData = async () => {
+        setLoading(true)
         const options = {
             method: 'GET',
             headers: {
@@ -82,6 +105,7 @@ const Portfolio: React.FC = () => {
             const { user_data, user_portfolio } = data
             setData(user_data)
             setPortfolio(user_portfolio)
+            setLoading(false)
         }
     }
 
@@ -111,6 +135,7 @@ const Portfolio: React.FC = () => {
                 break;
             case 'avgCust':
                 new_obj['avgCust'] = parseInt(value)
+                new_obj['rating'] = ratingObj(parseInt(value))
                 break;
             case 'salaryMargin':
                 new_obj['salaryMargin'] = value
@@ -134,52 +159,52 @@ const Portfolio: React.FC = () => {
         setData(new_data)
     }
 
-    const handleOTP = (e:React.ChangeEvent<HTMLInputElement>) => {
-        const {value} = e.target
+    const handleOTP = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target
         setInputOtp(value)
     }
 
-    const sendMailOtp = async() => {
-        const {mail} = data
+    const sendMailOtp = async () => {
+        const { mail } = data
         const url = `https://orent.onrender.com/verifyMail`
         const options = {
-            method:'POST',
-            headers:{
-              "Content-type": "application/json; charset=UTF-8"
+            method: 'POST',
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
             },
-            body:JSON.stringify({mail})
+            body: JSON.stringify({ mail })
         }
-        const res = await fetch(url,options)
+        const res = await fetch(url, options)
         // console.log(res)
-        if(res.ok){
+        if (res.ok) {
             const resData = await res.json()
-            // console.log(resData,'otp')
+            console.log(resData,'otp')
             setOtp(resData.otp)
         }
     }
 
     const verifyOtp = () => {
-        if(parseInt(otp) === parseInt(inputOTP)){
+        if (parseInt(otp) === parseInt(inputOTP)) {
             console.log('OK')
             setMailVerification(true)
             alert('Verified Successfully')
-        }else{
+        } else {
             alert('Invalid OTP, try again by sending it.')
         }
     }
 
-    const handleSubmit = async(e:React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         var completion = true
-        if(data.mobile == '' || portfolio.location == '' || portfolio.avgCust == 0 || portfolio.desc == '' || portfolio.other == '' || portfolio.salaryMargin == '' || portfolio.style == ''){
+        if (data.mobile == '' || portfolio.location == '' || portfolio.avgCust == 0 || portfolio.desc == '' || portfolio.other == '' || portfolio.salaryMargin == '' || portfolio.style == '') {
             completion = false
         }
-        if(!mailVerification){
+        if (!mailVerification) {
             completion = false
         }
         const options = {
             method: "POST",
-            body: JSON.stringify({data,portfolio:{...portfolio,isCompleted:completion,mailVerification}}),
+            body: JSON.stringify({ data, portfolio: { ...portfolio, isCompleted: completion, mailVerification } }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': `Bearer ${jwt_token}`
@@ -199,10 +224,15 @@ const Portfolio: React.FC = () => {
     }
 
 
-    return (
-
-        <>
-            <Header />
+    const renderContext = () => {
+        if (loading) {
+            return (
+                <div className='container' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 400 }}>
+                    <ThreeDots color=" #3b82f6" height="50" width="50" />
+                </div>
+            )
+        }
+        return (
             <div className="container" style={{ marginTop: 200 }}>
                 <div className="row col-12 justify-content-center">
                     <h4 className="text-success" style={{ fontSize: 30 }}>Portfolio</h4>
@@ -238,13 +268,13 @@ const Portfolio: React.FC = () => {
                                 </Col>
                             </Row>
                             {!portfolio.mailVerification && <Row className="form-group">
-                                <Col md={4}><button type="button" onClick={sendMailOtp} style={{backgroundColor:'blue',color:'white',padding:5,border:'none',cursor:'pointer'}} >Send OTP</button></Col>
+                                <Col md={4}><button type="button" onClick={sendMailOtp} style={{ backgroundColor: 'blue', color: 'white', padding: 5, border: 'none', cursor: 'pointer' }} >Send OTP</button></Col>
                                 <Col md={4}>
                                     <input type='text' role="otp" id="otp" name="otp"
                                         className="form-control" placeholder="00000" onChange={handleOTP}
                                     />
                                 </Col>
-                                <Col md={4}><button onClick={verifyOtp} type="button" style={{backgroundColor:'blue',color:'white',padding:5,border:'none',cursor:'pointer'}}>Verify</button></Col>
+                                <Col md={4}><button onClick={verifyOtp} type="button" style={{ backgroundColor: 'blue', color: 'white', padding: 5, border: 'none', cursor: 'pointer' }}>Verify</button></Col>
                             </Row>}
                             <Row className="form-group">
                                 <Label htmlFor="mobile" md={3}>Mobile:</Label>
@@ -361,6 +391,14 @@ const Portfolio: React.FC = () => {
                     </div>
                 </div>
             </div>
+        )
+    }
+
+    return (
+
+        <>
+            <Header />
+            {renderContext()}
         </>
     );
 }

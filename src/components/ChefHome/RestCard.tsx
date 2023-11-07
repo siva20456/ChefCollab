@@ -17,7 +17,7 @@ const RestCard: React.FC<RestCardProps> = ({ name,style, imageUrl, email,locatio
     <div className="chef-cont shadow">
       <img src={imageUrl} alt={name} />
       <div>
-        <h3>{name}</h3>
+        <h3 style={{fontSize:18}}>{name}</h3>
         <p>{style} || {location}</p>
         <Link to={`/restDetail/${name}`}><button className='btn-danger'>Portfolio</button></Link>
       </div>

@@ -11,8 +11,8 @@ interface Service {
 
 const servicesData: Service[] = [
     {
-        title: 'Recipe Sharing',
-        description: 'Share your favorite recipes with a global community of food enthusiasts.',
+        title: 'Restaurant',
+        description: 'Connect with Top Talented Chefs and give them culinary oppurtunities.',
         icon: 'icon-recipe',
     },
     {
@@ -21,8 +21,8 @@ const servicesData: Service[] = [
         icon: 'icon-chef',
     },
     {
-        title: 'Cooking Classes',
-        description: 'Join online cooking classes and learn to prepare delicious dishes.',
+        title: 'Chef-Restaurant Interactivity',
+        description: 'Join our Platform and get an International level interactivity.',
         icon: 'icon-cooking-class',
     },
 ];
@@ -70,7 +70,7 @@ const LandingPage: React.FC = () => {
                         <li><a href="#about-us">About Us</a></li>
                         <li><a href="#services-section">Services</a></li>
                         <li><a href="#contact">Contact</a></li>
-                        <li><a href='' onClick={restSignIn}>Restaurent?</a></li>
+                        <li><a href='' onClick={restSignIn}>Restaurant?</a></li>
                     </ul>
                 </nav>
             </header>

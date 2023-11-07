@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import './SignInterface.css';
@@ -35,6 +35,22 @@ function SignInterface() {
     const [status, setStatus] = useState<String>('SignIn')
     const [mail, setMail] = useState<String>('')
     const [password, setPassword] = useState<String>('')
+
+
+    useEffect(() => {
+        const jwt_token = Cookies.get('jwt_token');
+        const user_type = Cookies.get('user_type')
+        console.log(user_type)
+        if (user_type == 'Chef') {
+            //need to check authorization
+
+            navigate('/ChefHome', { replace: true })
+        } else if (user_type == 'Restaurant') {
+            //need to  check Auth
+
+            navigate('/RestHome', { replace: true })
+        }
+    })
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -170,8 +186,8 @@ function SignInterface() {
                             <label className='label' htmlFor="age">Age:</label>
                             <input
                                 type='number'
-                                id="name"
-                                name="name"
+                                id="age"
+                                name="age"
                                 value={formData.age}
                                 onChange={handleChange}
                                 required

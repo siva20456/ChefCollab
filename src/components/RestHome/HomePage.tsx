@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie';
 
+import { ThreeDots } from 'react-loader-spinner';
+
 import Header from './Header';
 import SearchBar from './SearchTab';
 import ChefCard from './ChefCard';
@@ -36,16 +38,19 @@ function Home() {
   const [chefList, setChefList] = useState<Chef[]>([])
   const [filteredChefs, setFilteredChefs] = useState<Chef[]>([])
   const [modal, setModal] = useState(false)
+  const [loading, setLoading] = useState(true)
   const jwt_token = Cookies.get('jwt_token');
   const user_type = Cookies.get('user_type');
   const nav = useNavigate()
-  if (user_type != 'Restaurant' || jwt_token === null) {
-    nav('/', { replace: true })
-  }
+
 
   useEffect(() => {
-    
-    getChefData()
+    if (user_type != 'Restaurant' || jwt_token === null) {
+      nav('/', { replace: true })
+    } else {
+      getChefData()
+    }
+
   }, [])
 
   const getPersonalData = async () => {
@@ -61,14 +66,15 @@ function Home() {
     const infoResp = await fetch(url, options)
     if (infoResp.status === 200) {
       const data = await infoResp.json()
-      console.log(data,'data')
-      const {user_data,user_portfolio} = data
-      Cookies.set('name',user_data.name,{expires:1})
+      console.log(data, 'data')
+      const { user_data, user_portfolio } = data
+      Cookies.set('name', user_data.name, { expires: 1 })
       return user_portfolio
     }
   }
 
   const getChefData = async () => {
+    setLoading(true)
     const url = 'http://localhost:3005/chefData'
     const response = await fetch(url)
     console.log(response)
@@ -82,13 +88,14 @@ function Home() {
         return ({ ...e, imageUrl: femaleChefs[Math.floor(Math.random() * 3)] })
       })
       const user_portfolio = await getPersonalData()
-      Cookies.set('restMail',user_portfolio.isCompleted,{expires:1})
-      Cookies.set('mail',user_portfolio.mail,{expires:1})
-      if(!user_portfolio.isCompleted){
+      Cookies.set('restMail', user_portfolio.isCompleted, { expires: 1 })
+      Cookies.set('mail', user_portfolio.mail, { expires: 1 })
+      if (!user_portfolio.isCompleted) {
         setModal(true)
       }
       setChefList(chefData)
       setFilteredChefs(chefData)
+      setLoading(false)
     }
   }
 
@@ -112,20 +119,33 @@ function Home() {
   };
 
 
+  const renderContext = () => {
+    if (loading) {
+      return (
+        <div className='container' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 400 }}>
+          <ThreeDots color=" #3b82f6" height="50" width="50" />
+        </div>
+      )
+    }
+    return (
+      <div className="Home">
+        {modal && <Notification message={`Hello Org., Complete your protfolio for better recommendations..!`} type='success' />}
+        <Header />
+        <SearchBar onSearch={handleSearch} />
+        <div className="chef-list">
+          {filteredChefs.map((chef, index) => (
+            <ChefCard key={index} {...chef} />
+          ))}
+        </div>
+
+      </div>
+    )
+  }
+
 
 
   return (
-    <div className="Home">
-      {modal && <Notification message={`Hello Org., Complete your protfolio for better recommendations..!`} type='success' />}
-      <Header />
-      <SearchBar onSearch={handleSearch} />
-      <div className="chef-list">
-        {filteredChefs.map((chef, index) => (
-          <ChefCard key={index} {...chef} />
-        ))}
-      </div>
-      
-    </div>
+    renderContext()
   );
 }
 

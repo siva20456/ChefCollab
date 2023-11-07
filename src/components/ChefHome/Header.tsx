@@ -17,7 +17,7 @@ const Header: React.FC = () => {
 
   return (
     <header className="header fixed-top">
-        <img src={Logo} className='logo' />
+        <img src={Logo} className='logo'  />
       <nav>
         <ul>
           <li><a href="/ChefHome">Home</a></li>

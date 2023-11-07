@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Button, Label, Col, Row } from 'reactstrap';
+import { useNavigate } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
 import Header from "../ChefHome/Header";
 import Cookies from "js-cookie";
 
@@ -67,14 +69,19 @@ const ChefPortfolio: React.FC = () => {
     const [loading, setLoading] = useState(true)
     const [mailVerification, setMailVerification] = useState(true)
     const jwt_token = Cookies.get('jwt_token')
+    const user_type = Cookies.get('user_type');
+    const nav = useNavigate()
+    
 
     useEffect(() => {
-        setLoading(true)
+        if (user_type != 'Chef' || jwt_token === null) {
+            nav('/', { replace: true })
+        }
         getPersonalData()
-        setLoading(false)
     }, [])
 
     const getPersonalData = async () => {
+        setLoading(true)
         const options = {
             method: 'GET',
             headers: {
@@ -92,6 +99,7 @@ const ChefPortfolio: React.FC = () => {
             setData(user_data)
             setPortfolio(user_portfolio)
             setMailVerification(user_portfolio.mailVerification)
+            setLoading(false)
         }
     }
 
@@ -167,7 +175,7 @@ const ChefPortfolio: React.FC = () => {
         // console.log(res)
         if (res.ok) {
             const resData = await res.json()
-            // console.log(resData, 'otp')
+            console.log(resData, 'otp')
             setOtp(resData.otp)
         }
     }
@@ -218,7 +226,9 @@ const ChefPortfolio: React.FC = () => {
     const renderContext = () => {
         if (loading) {
             return (
-                <div>Loading....</div>
+                <div className='container' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 400 }}>
+                    <ThreeDots color=" #3b82f6" height="50" width="50" />
+                </div>
             )
         }
         return (
@@ -257,13 +267,13 @@ const ChefPortfolio: React.FC = () => {
                                 </Col>
                             </Row>
                             {!portfolio.mailVerification && <Row className="form-group">
-                                <Col md={4}><button type="button" onClick={sendMailOtp} style={{backgroundColor:'blue',color:'white',padding:5,border:'none',cursor:'pointer'}}>Send OTP</button></Col>
+                                <Col md={4}><button type="button" onClick={sendMailOtp} style={{ backgroundColor: 'blue', color: 'white', padding: 5, border: 'none', cursor: 'pointer' }}>Send OTP</button></Col>
                                 <Col md={4}>
                                     <input type='text' role="otp" id="otp" name="otp"
                                         className="form-control" onChange={handleOTP}
                                     />
                                 </Col>
-                                <Col md={4}><button onClick={verifyOtp} type="button" style={{backgroundColor:'blue',color:'white',padding:5,border:'none',cursor:'pointer'}}>Verify</button></Col>
+                                <Col md={4}><button onClick={verifyOtp} type="button" style={{ backgroundColor: 'blue', color: 'white', padding: 5, border: 'none', cursor: 'pointer' }}>Verify</button></Col>
                             </Row>}
                             <Row className="form-group">
                                 <Label htmlFor="age" md={4}>Age:</Label>
