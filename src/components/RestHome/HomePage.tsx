@@ -21,10 +21,10 @@ interface Chef {
   username: string;
   specialty: string;
   imageUrl: string;
-  email: string;
+  mail: string;
   password: string;
-  fname: string;
-  lname: string;
+  f_name: string;
+  l_name: string;
   age: number;
   mobile: string;
   location: string;
@@ -82,6 +82,8 @@ function Home() {
         return ({ ...e, imageUrl: femaleChefs[Math.floor(Math.random() * 3)] })
       })
       const user_portfolio = await getPersonalData()
+      Cookies.set('restMail',user_portfolio.isCompleted,{expires:1})
+      Cookies.set('mail',user_portfolio.mail,{expires:1})
       if(!user_portfolio.isCompleted){
         setModal(true)
       }

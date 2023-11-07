@@ -1,28 +1,26 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Styles.css';
 
 interface ChefCardProps {
   username: string;
-  email: string;
+  mail: string;
   specialty: string;
-  fname: string;
-  lname: string;
-  age: number;
-  mobile: string;
+  f_name: string;
+  l_name: string;
   location: string;
-  gender: string;
   imageUrl: string;
 }
 
-const ChefCard: React.FC<ChefCardProps> = ({ username, specialty, imageUrl, email, fname,lname,age,mobile,location,gender}) => {
-  console.log(username,email, fname,lname,age,mobile,location,gender)
-  return (
-    <div className="chef-card">
+const ChefCard: React.FC<ChefCardProps> = ({ username, specialty, imageUrl, mail, f_name,l_name,location}) => {
+  console.log(username,mail, f_name,l_name,location,specialty)
+  return ( 
+    <div className="chef-cont shadow">
       <img src={imageUrl} alt={username} />
       <div>
-        <h3>{username}</h3>
-        <p>{specialty}</p>
-        <button className='btn-danger'>Portfolio</button>
+        <h3>{f_name} {l_name}</h3>
+        <p>{specialty} || {location}</p>
+        <Link to={`/chefDetail/${username}`}><button className='btn-danger'>Portfolio</button></Link>
       </div>
     </div>
   );

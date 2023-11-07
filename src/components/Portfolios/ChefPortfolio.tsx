@@ -13,19 +13,21 @@ interface Data {
     experience: number;
     f_name: string;
     l_name: string;
-    age : number;
+    age: number;
     prev_salary: number;
-    rating:number;
-    relocate:boolean;
+    rating: number;
+    relocate: boolean;
     location: string;
-    specialty:string;
+    specialty: string;
 }
 
 interface Portfolio {
     username: string;
     mail: string;
     desc: string;
+    skills: string[];
     isCompleted: boolean;
+    mailVerification: boolean;
 }
 
 const sampleData = {
@@ -37,19 +39,22 @@ const sampleData = {
     experience: 0,
     f_name: '',
     l_name: '',
-    age : 0,
+    age: 0,
     prev_salary: 0,
-    rating:0,
-    relocate:false,
+    rating: 0,
+    relocate: false,
     location: '',
-    specialty:''
+    specialty: ''
 }
 
 const samplePortfolio = {
     username: '',
     mail: '',
     desc: '',
-    isCompleted: false
+    skills: [],
+    isCompleted: false,
+    mailVerification: false
+
 }
 
 
@@ -57,10 +62,16 @@ const ChefPortfolio: React.FC = () => {
 
     const [portfolio, setPortfolio] = useState<Portfolio>(samplePortfolio)
     const [data, setData] = useState<Data>(sampleData)
+    const [otp, setOtp] = useState('')
+    const [inputOTP, setInputOtp] = useState('')
+    const [loading, setLoading] = useState(true)
+    const [mailVerification, setMailVerification] = useState(true)
     const jwt_token = Cookies.get('jwt_token')
 
     useEffect(() => {
+        setLoading(true)
         getPersonalData()
+        setLoading(false)
     }, [])
 
     const getPersonalData = async () => {
@@ -80,10 +91,11 @@ const ChefPortfolio: React.FC = () => {
             const { user_data, user_portfolio } = data
             setData(user_data)
             setPortfolio(user_portfolio)
+            setMailVerification(user_portfolio.mailVerification)
         }
     }
 
-    
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -122,6 +134,13 @@ const ChefPortfolio: React.FC = () => {
         setData(new_obj)
     };
 
+    const handleSkills = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        const new_data = { ...portfolio }
+        new_data.skills = value.split(',')
+        setPortfolio(new_data)
+    }
+
     const handleDesc = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         const new_data = { ...portfolio }
@@ -129,15 +148,53 @@ const ChefPortfolio: React.FC = () => {
         setPortfolio(new_data)
     }
 
-    const handleSubmit = async(e:React.FormEvent) => {
+    const handleOTP = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target
+        setInputOtp(value)
+    }
+
+    const sendMailOtp = async () => {
+        const { mail } = data
+        const url = `https://orent.onrender.com/verifyMail`
+        const options = {
+            method: 'POST',
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify({ mail })
+        }
+        const res = await fetch(url, options)
+        // console.log(res)
+        if (res.ok) {
+            const resData = await res.json()
+            // console.log(resData, 'otp')
+            setOtp(resData.otp)
+        }
+    }
+
+    const verifyOtp = () => {
+        if (parseInt(otp) === parseInt(inputOTP)) {
+            console.log('OK')
+            setMailVerification(true)
+            alert('Verified Successfully')
+        } else {
+            alert('Invalid OTP, try again by sending it.')
+        }
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         var completion = true
-        if(data.mobile == 0 || data.location == '' || data.exp_salary == 0 || portfolio.desc == '' || data.prev_salary == 0 || data.experience == 0 || data.specialty == '' || data.rating == 0){
+        if (data.mobile == 0 || data.location == '' || data.exp_salary == 0 || portfolio.desc == '' || data.prev_salary == 0 || data.experience == 0 || data.specialty == '' || data.rating == 0) {
             completion = false
         }
+        if (!mailVerification) {
+            completion = false
+        }
+
         const options = {
             method: "POST",
-            body: JSON.stringify({data,portfolio:{...portfolio,isCompleted:completion}}),
+            body: JSON.stringify({ data, portfolio: { ...portfolio, isCompleted: completion, mailVerification } }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': `Bearer ${jwt_token}`
@@ -148,6 +205,8 @@ const ChefPortfolio: React.FC = () => {
         if (res.status === 200) {
             const data = await res.json()
             console.log(data)
+            const new_obj = { ...portfolio, mailVerification: true }
+            setPortfolio(new_obj)
             alert('Data Updated Successfully')
         } else {
             const data = await res.json()
@@ -156,11 +215,13 @@ const ChefPortfolio: React.FC = () => {
         }
     }
 
-
-    return (
-
-        <>
-            <Header />
+    const renderContext = () => {
+        if (loading) {
+            return (
+                <div>Loading....</div>
+            )
+        }
+        return (
             <div className="container" style={{ marginTop: 200 }}>
                 <div className="row col-12 justify-content-center">
                     <h4 className="text-success" style={{ fontSize: 30 }}>Portfolio</h4>
@@ -195,6 +256,15 @@ const ChefPortfolio: React.FC = () => {
 
                                 </Col>
                             </Row>
+                            {!portfolio.mailVerification && <Row className="form-group">
+                                <Col md={4}><button type="button" onClick={sendMailOtp} style={{backgroundColor:'blue',color:'white',padding:5,border:'none',cursor:'pointer'}}>Send OTP</button></Col>
+                                <Col md={4}>
+                                    <input type='text' role="otp" id="otp" name="otp"
+                                        className="form-control" onChange={handleOTP}
+                                    />
+                                </Col>
+                                <Col md={4}><button onClick={verifyOtp} type="button" style={{backgroundColor:'blue',color:'white',padding:5,border:'none',cursor:'pointer'}}>Verify</button></Col>
+                            </Row>}
                             <Row className="form-group">
                                 <Label htmlFor="age" md={4}>Age:</Label>
                                 <Col md={4}>
@@ -229,6 +299,14 @@ const ChefPortfolio: React.FC = () => {
                                 <Col md={9}>
                                     <input type='text' role="specialty" id="specialty" name="specialty" placeholder="E.g. South Indian"
                                         className="form-control" defaultValue={data.specialty} onChange={handleChange} />
+                                </Col>
+                            </Row>
+
+                            <Row className="form-group">
+                                <Label htmlFor="skills" md={8}>List Out the Skills that make you StandOut of Others :</Label>
+                                <Col md={9}>
+                                    <input type='text' role="skills" id="skills" name="skills" placeholder="E.g. Signature Dishes"
+                                        className="form-control" defaultValue={portfolio.skills} onChange={handleSkills} />
                                 </Col>
                             </Row>
 
@@ -271,14 +349,14 @@ const ChefPortfolio: React.FC = () => {
                             </Row>
 
                             <Row className="form-group">
-                                <Label htmlFor="rating" md={4}>Expected Salary (Per Year):</Label>
+                                <Label htmlFor="rating" md={4}>Rating:</Label>
                                 <Col md={6}>
                                     <input type='text' role="rating" id="rating" name="rating" placeholder=""
                                         className="form-control" defaultValue={data.rating} onChange={handleChange} />
                                 </Col>
                             </Row>
 
-                            
+
                             <Row className="form-group">
                                 <Label htmlFor="desc" md={3}>Description:</Label>
                                 <Col md={9}>
@@ -308,6 +386,15 @@ const ChefPortfolio: React.FC = () => {
                     </div>
                 </div>
             </div>
+        )
+    }
+
+
+    return (
+
+        <>
+            <Header />
+            {renderContext()}
         </>
     );
 }

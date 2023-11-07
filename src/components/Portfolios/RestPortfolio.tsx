@@ -55,7 +55,11 @@ const Portfolio: React.FC = () => {
 
     const [portfolio, setPortfolio] = useState<Portfolio>(samplePortfolio)
     const [data, setData] = useState<Data>(sampleData)
-    const jwt_token = Cookies.get('jwt_token')
+    const jwt_token = Cookies.get('jwt_token') 
+    const [otp,setOtp] = useState('')
+    const [inputOTP,setInputOtp] = useState('')
+    const [loading,setLoading] = useState(true)
+    const [mailVerification,setMailVerification] = useState(true)
 
     useEffect(() => {
         getPersonalData()
@@ -130,15 +134,52 @@ const Portfolio: React.FC = () => {
         setData(new_data)
     }
 
+    const handleOTP = (e:React.ChangeEvent<HTMLInputElement>) => {
+        const {value} = e.target
+        setInputOtp(value)
+    }
+
+    const sendMailOtp = async() => {
+        const {mail} = data
+        const url = `https://orent.onrender.com/verifyMail`
+        const options = {
+            method:'POST',
+            headers:{
+              "Content-type": "application/json; charset=UTF-8"
+            },
+            body:JSON.stringify({mail})
+        }
+        const res = await fetch(url,options)
+        // console.log(res)
+        if(res.ok){
+            const resData = await res.json()
+            // console.log(resData,'otp')
+            setOtp(resData.otp)
+        }
+    }
+
+    const verifyOtp = () => {
+        if(parseInt(otp) === parseInt(inputOTP)){
+            console.log('OK')
+            setMailVerification(true)
+            alert('Verified Successfully')
+        }else{
+            alert('Invalid OTP, try again by sending it.')
+        }
+    }
+
     const handleSubmit = async(e:React.FormEvent) => {
         e.preventDefault()
         var completion = true
         if(data.mobile == '' || portfolio.location == '' || portfolio.avgCust == 0 || portfolio.desc == '' || portfolio.other == '' || portfolio.salaryMargin == '' || portfolio.style == ''){
             completion = false
         }
+        if(!mailVerification){
+            completion = false
+        }
         const options = {
             method: "POST",
-            body: JSON.stringify({data,portfolio:{...portfolio,isCompleted:completion}}),
+            body: JSON.stringify({data,portfolio:{...portfolio,isCompleted:completion,mailVerification}}),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': `Bearer ${jwt_token}`
@@ -196,6 +237,15 @@ const Portfolio: React.FC = () => {
 
                                 </Col>
                             </Row>
+                            {!portfolio.mailVerification && <Row className="form-group">
+                                <Col md={4}><button type="button" onClick={sendMailOtp} style={{backgroundColor:'blue',color:'white',padding:5,border:'none',cursor:'pointer'}} >Send OTP</button></Col>
+                                <Col md={4}>
+                                    <input type='text' role="otp" id="otp" name="otp"
+                                        className="form-control" placeholder="00000" onChange={handleOTP}
+                                    />
+                                </Col>
+                                <Col md={4}><button onClick={verifyOtp} type="button" style={{backgroundColor:'blue',color:'white',padding:5,border:'none',cursor:'pointer'}}>Verify</button></Col>
+                            </Row>}
                             <Row className="form-group">
                                 <Label htmlFor="mobile" md={3}>Mobile:</Label>
                                 <Col md={9}>

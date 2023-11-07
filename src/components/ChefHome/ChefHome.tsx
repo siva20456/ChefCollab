@@ -38,8 +38,8 @@ function ChefHome() {
   }
 
   useEffect(() => {
-    const user_portfolio  = getPersonalData()
-    getRestData(user_portfolio)
+    
+    getRestData()
   }, [])
 
   const getPersonalData = async () => {
@@ -63,7 +63,7 @@ function ChefHome() {
     }
   }
 
-  const getRestData = async (user_portfolio:any) => {
+  const getRestData = async () => {
     const url = 'http://localhost:3005/restData'
     const response = await fetch(url)
     console.log(response)
@@ -74,6 +74,8 @@ function ChefHome() {
 
         return ({ ...e, imageUrl: restaurants[Math.floor(Math.random() * 4)] })
       })
+      const user_portfolio = await getPersonalData()
+      Cookies.set('mail',user_portfolio.mail,{expires:1})
       if(!user_portfolio.isCompleted){
         setNotifies(true)
       }

@@ -69,12 +69,14 @@ const RestaurantRegister: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mobile, setMobile] = useState('')
+  const [location, setLocation] = useState('')
+  const [style, setStyle] = useState('')
   const [status, setStatus] = useState('SignIn')
 
   const handleRestRegister = async () => {
     const options = {
       method: "POST",
-      body: JSON.stringify({ restaurantName, email, password, mobile }),
+      body: JSON.stringify({ restaurantName, email, password, mobile,location,style }),
       headers: {
         "Content-type": "application/json; charset=UTF-8"
       }
@@ -154,6 +156,18 @@ const RestaurantRegister: React.FC = () => {
             placeholder="Mobile"
             value={mobile}
             onChange={(e) => setMobile(e.target.value)}
+          />
+          <Input
+            type="location"
+            placeholder="Location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+          />
+          <Input
+            type="style"
+            placeholder="style"
+            value={style}
+            onChange={(e) => setStyle(e.target.value)}
           />
           <Button onClick={handleRestRegister}>Register</Button>
           <p className='text-secondary mt-3' style={{ fontSize: 12 }}>Already had account?<button className='signup-btn' onClick={() => setStatus('SignIn')}>Sign In</button></p>
