@@ -129,7 +129,7 @@ function ChefHome() {
             <RestCard key={index} {...rest} />
           ))}
         </div>
-
+        
       </div>
     )
   }

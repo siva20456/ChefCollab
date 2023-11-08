@@ -13,6 +13,8 @@ import RestDetailPage from './components/DetailPages/RestDetailPage';
 import ApplicationsPage from './components/Applications/ChefAppPage';
 import RestApplicationsPage from './components/Applications/RestAppPage';
 
+import ChatBot from './components/ChatBot/MasterChefChatBot';
+
 const App: React.FC = () => {
   return (
     <Router>
@@ -28,6 +30,7 @@ const App: React.FC = () => {
         <Route path='/restDetail/:name' element={<RestDetailPage />} />
         <Route path='/Chefapplications' element = {<ApplicationsPage />} />
         <Route path='/RestApplications' element={<RestApplicationsPage/>} />
+        <Route path='/ChatBot' element={<ChatBot/>} />
       </Routes>
     </Router>
   )

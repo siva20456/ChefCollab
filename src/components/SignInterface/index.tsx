@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import './SignInterface.css';
 
+import restaurant from '../../Logos/restaurant-interior.jpg'
+
 interface ChefFormData {
     name: string;
     email: string;

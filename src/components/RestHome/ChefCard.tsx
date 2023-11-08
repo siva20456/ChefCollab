@@ -19,7 +19,7 @@ const ChefCard: React.FC<ChefCardProps> = ({ username, specialty, imageUrl, mail
       <img src={imageUrl} alt={username} />
       <div>
         <h3 style={{fontSize:16}}>{f_name} {l_name}</h3>
-        <p>{specialty} || {location}</p>
+        <p >{specialty} || {location}</p>
         <Link to={`/chefDetail/${username}`}><button className='btn-danger'>Portfolio</button></Link>
       </div>
     </div>

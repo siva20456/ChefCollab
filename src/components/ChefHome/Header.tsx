@@ -23,6 +23,7 @@ const Header: React.FC = () => {
           <li><a href="/ChefHome">Home</a></li>
           <li><a href="/ChefPortfolio">My Portfolio</a></li>
           <li><a href="/Chefapplications">My Applications</a></li>
+          <li><a href="/ChatBot">ChatBot</a></li>
           <li><a onClick={Logout} style={{cursor:'pointer'}}>Logout</a></li>
         </ul>
       </nav>

@@ -2,14 +2,14 @@ import styled from "styled-components";
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie'
-
+import restauarnt from '../../Logos/restaurant-interior.jpg'
+import './index.css'
 
 const MainContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(135deg, #ffcc29, #ff5733);
 `
 
 const Container = styled.div`
@@ -131,7 +131,7 @@ const RestaurantRegister: React.FC = () => {
   const renderInterface = () => {
     switch (status) {
       case 'Register':
-        return <Container>
+        return <Container >
           <Title>Restaurant Registration</Title>
           <Input
             type="text"
@@ -175,7 +175,7 @@ const RestaurantRegister: React.FC = () => {
         </Container>
 
       case 'SignIn':
-        return <Container>
+        return <Container >
           <Title>Restaurant Login</Title>
           <Input
             type="text"
@@ -197,7 +197,7 @@ const RestaurantRegister: React.FC = () => {
   }
 
   return (
-    <MainContainer>
+    <MainContainer className="cont">
       {renderInterface()}
     </MainContainer>
   );
