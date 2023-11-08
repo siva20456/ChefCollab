@@ -12,7 +12,7 @@ interface RestCardProps {
 }
 
 const RestCard: React.FC<RestCardProps> = ({ name,style, imageUrl, email,location}) => {
-  console.log(name,email,location)
+  // console.log(name,email,location)
   return (
     <div className="chef-cont shadow">
       <img src={imageUrl} alt={name} />

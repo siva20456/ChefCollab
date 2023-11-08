@@ -13,7 +13,7 @@ interface ChefCardProps {
 }
 
 const ChefCard: React.FC<ChefCardProps> = ({ username, specialty, imageUrl, mail, f_name,l_name,location}) => {
-  console.log(username,mail, f_name,l_name,location,specialty)
+  // console.log(username,mail, f_name,l_name,location,specialty)
   return ( 
     <div className="chef-cont shadow">
       <img src={imageUrl} alt={username} />
