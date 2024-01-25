@@ -70,7 +70,7 @@ function ChefHome() {
 
   const getRestData = async () => {
     setLoading(true)
-    const url = 'http://localhost:3005/restData'
+    const url = 'https://chefcollabapi.onrender.com/restData'
     const response = await fetch(url)
     console.log(response)
     if (response.status === 200) {
