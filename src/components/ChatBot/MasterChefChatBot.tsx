@@ -15,7 +15,7 @@ const ChatBot = () => {
         </div>
         <iframe
           title="Gradio App"
-          src="Gradio" //https://sivashankar-chef-0.hf.space
+          src="https://sivashankar-chef-0.hf.space" //https://sivashankar-chef-0.hf.space
           width="100%"
           height="500px"
           frameBorder="0"
