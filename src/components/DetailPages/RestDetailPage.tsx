@@ -88,7 +88,7 @@ const RestDetailPage: React.FC = () => {
 
   const getRestDetail = async () => {
     setLoading(true)
-    const url = 'http://localhost:3005/restDetail'
+    const url = 'https://chefcollabapi.onrender.com/restDetail'
     const options = {
       method: 'POST',
       body: JSON.stringify({ name }),
@@ -110,7 +110,7 @@ const RestDetailPage: React.FC = () => {
   }
 
   const requestFor = async () => {
-    const url = 'http://localhost:3005/addRequest'
+    const url = 'https://chefcollabapi.onrender.com/addRequest'
     const options = {
       method: 'POST',
       body: JSON.stringify({ name, mail: Cookies.get('mail') }),

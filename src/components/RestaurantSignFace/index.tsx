@@ -82,7 +82,7 @@ const RestaurantRegister: React.FC = () => {
       }
 
     }
-    const res = await fetch(`http://localhost:3005/RestRegister`, options)
+    const res = await fetch(`https://chefcollabapi.onrender.com/RestRegister`, options)
     console.log(res)
     if (res.status === 200) {
       const data = await res.json()
@@ -111,7 +111,7 @@ const RestaurantRegister: React.FC = () => {
           "Content-type": "application/json; charset=UTF-8"
         }
       }
-      const res = await fetch(`http://localhost:3005/RestLogin`, options)
+      const res = await fetch(`https://chefcollabapi.onrender.com/RestLogin`, options)
       console.log(res)
       if (res.status === 200) {
         const data = await res.json()

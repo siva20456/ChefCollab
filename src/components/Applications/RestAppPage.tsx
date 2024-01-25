@@ -48,7 +48,7 @@ const RestApplicationsPage: React.FC = () => {
 
     const getRequests = async () => {
         setLoading(true)
-        const url = 'http://localhost:3005/getRequests'
+        const url = 'https://chefcollabapi.onrender.com/getRequests'
 
         const infoResp = await fetch(url)
         if (infoResp.status === 200) {

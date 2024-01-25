@@ -74,7 +74,7 @@ function SignInterface() {
             }
 
         }
-        const res = await fetch(`http://localhost:3005/register`, options)
+        const res = await fetch(`https://chefcollabapi.onrender.com/register`, options)
         console.log(res)
         if (res.status === 200) {
             const data = await res.json()
@@ -105,7 +105,7 @@ function SignInterface() {
                     "Content-type": "application/json; charset=UTF-8"
                 }
             }
-            const res = await fetch(`http://localhost:3005/login`, options)
+            const res = await fetch(`https://chefcollabapi.onrender.com/login`, options)
             console.log(res)
             if (res.status === 200) {
                 const data = await res.json()

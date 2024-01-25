@@ -97,7 +97,7 @@ const Portfolio: React.FC = () => {
             }
         }
 
-        const url = `http://localhost:3005/getRestInfo`
+        const url = `https://chefcollabapi.onrender.com/getRestInfo`
         const infoResp = await fetch(url, options)
         if (infoResp.status === 200) {
             const data = await infoResp.json()
@@ -166,7 +166,7 @@ const Portfolio: React.FC = () => {
 
     const sendMailOtp = async () => {
         const { mail } = data
-        const url = `https://orent.onrender.com/verifyMail`
+        const url = `https://chefcollabapi.onrender.com/verifyMail`
         const options = {
             method: 'POST',
             headers: {
@@ -210,7 +210,7 @@ const Portfolio: React.FC = () => {
                 'Authorization': `Bearer ${jwt_token}`
             }
         }
-        const res = await fetch(`http://localhost:3005/updateRestPortfolio`, options)
+        const res = await fetch(`https://chefcollabapi.onrender.com/updateRestPortfolio`, options)
         console.log(res)
         if (res.status === 200) {
             const data = await res.json()

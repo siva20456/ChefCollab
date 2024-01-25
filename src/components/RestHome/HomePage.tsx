@@ -62,7 +62,7 @@ function Home() {
       }
     }
 
-    const url = `http://localhost:3005/getRestInfo`
+    const url = `https://chefcollabapi.onrender.com/getRestInfo`
     const infoResp = await fetch(url, options)
     if (infoResp.status === 200) {
       const data = await infoResp.json()
@@ -75,7 +75,7 @@ function Home() {
 
   const getChefData = async () => {
     setLoading(true)
-    const url = 'http://localhost:3005/chefData'
+    const url = 'https://chefcollabapi.onrender.com/chefData'
     const response = await fetch(url)
     console.log(response)
     if (response.status === 200) {

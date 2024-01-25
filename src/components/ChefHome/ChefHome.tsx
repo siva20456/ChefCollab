@@ -57,7 +57,7 @@ function ChefHome() {
       }
     }
 
-    const url = 'http://localhost:3005/getInfo'
+    const url = 'https://chefcollabapi.onrender.com/getInfo'
     const response = await fetch(url, options)
     console.log(response)
     if (response.status === 200) {

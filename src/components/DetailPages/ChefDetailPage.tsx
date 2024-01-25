@@ -82,7 +82,7 @@ const ChefDetailPage: React.FC = () => {
 
   const getChefDetail = async () => {
     setLoading(true)
-    const url = 'http://localhost:3005/chefDetail'
+    const url = 'https://chefcollabapi.onrender.com/chefDetail'
     const options = {
       method: 'POST',
       body: JSON.stringify({ username }),
@@ -113,7 +113,7 @@ const ChefDetailPage: React.FC = () => {
     else if (!portfolio.isCompleted) {
       alert('Chef did not Completed his/her portfolio. You will recieve once the other party Completed their portfolio.')
     } else {
-      const url = 'http://localhost:3005/sendChefDetails'
+      const url = 'https://chefcollabapi.onrender.com/sendChefDetails'
       const options = {
         method: 'POST',
         body: JSON.stringify({ username,mail:Cookies.get('mail') }),
